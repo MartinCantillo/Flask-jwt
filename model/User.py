@@ -1,15 +1,13 @@
 
 from hmac import compare_digest
 
-from config.bd import bd,app
+from config.bd import bd,app,ma
 class User(bd.Model):
    __tablename__="tbUser"
    id = bd.Column(bd.Integer, primary_key=True)
    username = bd.Column(bd.Text, nullable=False, unique=True)
    full_name = bd.Column(bd.Text, nullable=False)
    
-   def check_password(self, password):
-        return compare_digest(password, "password")
 
 with app.app_context():
     bd.create_all()
@@ -25,3 +23,7 @@ with app.app_context():
 #def user_lookup_callback(_jwt_header, jwt_data):
  #   identity = jwt_data["sub"]
   #  return User.query.filter_by(id=identity).one_or_none()
+#Descerializacion
+class UserSchema(ma.Schema):
+    class Meta:
+        fields=("id","username","full_name")

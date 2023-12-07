@@ -4,7 +4,11 @@ from flask_jwt_extended import current_user
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from config.bd import bd, app
-from model.User import User
+from model.User import User ,UserSchema
+
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 @app.route("/login_without_cookies", methods=["POST"])
 def login_without_cookies():
@@ -15,21 +19,26 @@ def login_without_cookies():
 @app.route("/login_with_cookies", methods=["POST"])
 def login_with_cookies():
     #Obtengo los datos del json
-    username = request.json.get("username")
-    full_name = request.json.get("full_name")
-    password = request.json.get("password")
+    username = request.json["username"]
+    full_name = request.json["full_name"]
+    password = request.json["password"]
     #Consulto en la bd
-    user=User.query.filter_by(username=username).one_or_none
+    user = User.query.filter_by(username=username).one_or_none()
+    # Imprime información útil para depuración
+    print(f"User object: {user}")
+    if user:
+        print(f"User ID: {user.id}")
     #verifico si esta el usuario o tambien si la contrasena conside con la que registre por defecto en el modelo
-    if not user or not user.check_password(password):
-        return jsonify("Wrong username or password"), 401
+    if not user :
+        return jsonify("Wrong username "), 401
     
     #sino 
-    response = jsonify({"msg": "login successful"})
     #se crea el token con la identidad
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity= user.id)
+    response = jsonify({"msg": "login successful"} , 'Acces_token ='+access_token)
     #Se establece en la cokie 
     set_access_cookies(response, access_token)
+    print("token"+access_token)
     return response
 
 
