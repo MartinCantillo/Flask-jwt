@@ -1,45 +1,56 @@
+from datetime import timedelta
 from flask import jsonify, request
+from model.Rol import Rol , RolSchema
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 from flask_jwt_extended import current_user
 from flask_jwt_extended import jwt_required
-from flask_jwt_extended import JWTManager
 from config.bd import bd, app
+
 from model.User import User ,UserSchema
 
+Rol_schema = RolSchema()
+rols_schema = RolSchema(many=True)
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 
+#Authenticate without send  the cookies to the frontend , it wont be used for now
 @app.route("/login_without_cookies", methods=["POST"])
 def login_without_cookies():
     access_token = create_access_token(identity="example_user")
     return jsonify(access_token=access_token)
 
-
+#Authenticate  send them to the frontend , it will be used  
 @app.route("/login_with_cookies", methods=["POST"])
 def login_with_cookies():
-    #Obtengo los datos del json
-    username = request.json["username"]
-    full_name = request.json["full_name"]
-    password = request.json["password"]
+
     #Consulto en la bd
-    user = User.query.filter_by(username=username).one_or_none()
-    # Imprime información útil para depuración
-    print(f"User object: {user}")
-    if user:
-        print(f"User ID: {user.id}")
-    #verifico si esta el usuario o tambien si la contrasena conside con la que registre por defecto en el modelo
-    if not user :
-        return jsonify("Wrong username "), 401
+    try:
+     #Obtengo los datos del json
+     username = request.json["username"]
+     password = request.json["password"]
+     print(username)
+     user = User.query.filter_by(username=username, password=password).one_or_none()
+     #verifico si esta el usuario o tambien si la contrasena conside con la que registre por defecto en el modelo
+     if not user or user.password !=password :
+        return jsonify("Wrong username or password incorrect "), 401
     
     #sino 
-    #se crea el token con la identidad
-    access_token = create_access_token(identity= user.id)
-    response = jsonify({"msg": "login successful"} , 'Acces_token ='+access_token)
-    #Se establece en la cokie 
-    set_access_cookies(response, access_token)
-    print("token"+access_token)
-    return response
+    # Crear un token con un tiempo de expiración de 1 hora
+     expires = timedelta(hours=1)
+    #se crea el token con la identidad , la identidad se crea con el id del usuario
+     access_token = create_access_token(identity= user.id , expires_delta=expires)
+     response = jsonify({"msg": "login successful"} , 'Acces_token ='+access_token)
+    #Se establece en la cokiee 
+     set_access_cookies(response, access_token)
+     print("token"+access_token)
+     return response
+    except Exception as e:
+     print(f"Error: {e}")
+     return jsonify({"error": "Internal Server Error"}), 500
+    
+    
+   
 
 
 @app.route("/logout_with_cookies", methods=["POST"])
