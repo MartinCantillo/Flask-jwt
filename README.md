@@ -1,26 +1,29 @@
 # Flask-JWT-Extended
 
-## JWT Authentication with Flask
+![Flask](https://img.shields.io/badge/Flask-3.0.0-blue?logo=flask)
+![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
+![JWT](https://img.shields.io/badge/JWT-JSON%20Web%20Token-green?logo=json-web-tokens)
 
-### Description
+## Description
 
 This project demonstrates a simple implementation of JWT (JSON Web Token) authentication using Flask and Flask-JWT-Extended. It includes user authentication, token generation, and protected routes.
 
-### Prerequisites
+## Prerequisites
 
 - Python 3.x
-- Flask 3.0.0
-- Flask-JWT-Extended 4.5.3
+- Flask 3.0.0 ![Flask](https://img.shields.io/badge/Flask-3.0.0-blue?logo=flask)
+- Flask-JWT-Extended 4.5.3 ![JWT](https://img.shields.io/badge/JWT-4.5.3-green?logo=json-web-tokens)
 - Flask-SQLAlchemy
 - Flask-Marshmallow
 - MySQL database
 
-### Installation
+## Installation
 
 1. Clone the repository:
 
     ```bash
     git clone https://github.com/MartinCantillo/Flask-jwt 
+    ```
 
 2. Install dependencies:
 
@@ -36,13 +39,13 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
     python app.py
     ```
 
-### Configuration
+## Configuration
 
-- MySQL Database: Update the `app.config['SQLALCHEMY_DATABASE_URI']` in `app.py` with your database connection details.
+- **MySQL Database:** Update the `app.config['SQLALCHEMY_DATABASE_URI']` in `app.py` with your database connection details.
 
-- JWT Configuration: Update the `app.config["JWT_SECRET_KEY"]` in `app.py` with a secure secret key.
+- **JWT Configuration:** Update the `app.config["JWT_SECRET_KEY"]` in `app.py` with a secure secret key.
 
-### Usage
+## Usage
 
 1. **Login without Cookies:**
 
@@ -84,7 +87,7 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
 
     Access a protected route by providing a valid JWT token only in headers.
 
-### Models
+## Models
 
 - **Role Model:**
 
@@ -99,7 +102,7 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
     - `password`: String(50)
     - `rol_id`: Integer, foreign key referencing `tblRol.id_rol`
 
-### Schemas
+## Schemas
 
 - **Role Schema:**
 
@@ -115,7 +118,7 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
     - `rol_id`
     - `rol`
 
-### Routes
+## Routes
 
 - `/login_without_cookies`: Authenticate without storing the token in cookies.
 - `/login_with_cookies`: Authenticate and store the token in cookies.
@@ -123,7 +126,7 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
 - `/protected`: Access a protected route (token can be in headers, cookies, JSON, or query string).
 - `/only_headers`: Access a protected route with the token only in headers.
 
-### Additional Notes
+## Additional Notes
 
 - Ensure that your MySQL server is running and the database is created.
 
@@ -131,6 +134,7 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
 
 - This project is intended as a basic demonstration and may need further enhancements for a production environment.
 
-### License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
