@@ -20,7 +20,7 @@ This project demonstrates a simple implementation of JWT (JSON Web Token) authen
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/MartinCantillo/Flask-jwt ```
+    git clone https://github.com/MartinCantillo/Flask-jwt 
 
 2. Install dependencies:
 
